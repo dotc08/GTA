@@ -45,6 +45,6 @@
           "Please enter a new password for the mysql passbolt user": "password"
           "Please enter a name for the passbolt database:": "passboltdb"
           "Do you want to install Haveged": "1"
-          "Please enter the domain name": "34.85.25.201"
+          "Please enter the domain name": "IP"
           "Do you want to setup a SSL certificate": "3"
         timeout: 160
