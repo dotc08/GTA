@@ -1,1 +1,53 @@
 # GTA
+
+
+
+---
+- name: Install and configure Passbolt CE on localhost
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  tasks:
+    - name: Download Passbolt CE repository setup script
+      ansible.builtin.get_url:
+        url: "https://download.passbolt.com/ce/installer/passbolt-repo-setup.ce.sh"
+        dest: "/tmp/passbolt-repo-setup.ce.sh"
+        mode: "0755"
+
+    - name: Download Passbolt CE SHA512SUM
+      ansible.builtin.get_url:
+        url: "https://github.com/passbolt/passbolt-dep-scripts/releases/latest/download/passbolt-ce-SHA512SUM.txt"
+        dest: "/tmp/passbolt-ce-SHA512SUM.txt"
+
+    - name: Run Passbolt CE repository setup script
+      ansible.builtin.shell:
+        cmd: "sha512sum -c passbolt-ce-SHA512SUM.txt && sudo bash ./passbolt-repo-setup.ce.sh  || echo \"Bad checksum. Aborting\" && rm -f passbolt-repo-setup.ce.sh"
+
+    - name: Install Passbolt CE server
+      ansible.builtin.package:
+        name: passbolt-ce-server
+        state: present
+
+    - name: Install expect
+      ansible.builtin.package:
+        name: expect
+        state: present
+
+    - name: Install pexpect Python library
+      ansible.builtin.pip:
+        name: pexpect
+        state: present
+
+    - name: Run Passbolt configure with expect
+      expect:
+        command: "sudo /usr/local/bin/passbolt-configure"
+        responses:
+          "Do you want to configure a local mariadb server on this machine?": "1"
+          "Please enter a new password for the root database user:": "password"
+          "Please enter a name for the passbolt database username": "passboltuser"
+          "Please enter a new password for the mysql passbolt user": "password"
+          "Please enter a name for the passbolt database:": "passboltdb"
+          "Do you want to install Haveged": "1"
+          "Please enter the domain name": "34.85.25.201"
+          "Do you want to setup a SSL certificate": "3"
+        timeout: 160
