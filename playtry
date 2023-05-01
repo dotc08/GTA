@@ -40,11 +40,11 @@
         command: "sudo /usr/local/bin/passbolt-configure"
         responses:
           "Do you want to configure a local mariadb server on this machine?": "1"
-          "Please enter a new password for the root database user:": "password"
-          "Please enter a name for the passbolt database username": "passboltuser"
-          "Please enter a new password for the mysql passbolt user": "password"
-          "Please enter a name for the passbolt database:": "passboltdb"
+          "Please enter a new password for the root database user:": ""
+          "Please enter a name for the passbolt database username": ""
+          "Please enter a new password for the mysql passbolt user": ""
+          "Please enter a name for the passbolt database:": ""
           "Do you want to install Haveged": "1"
           "Please enter the domain name": "IP"
-          "Do you want to setup a SSL certificate": "3"
+          "Do you want to setup a SSL certificate": "1"
         timeout: 160
