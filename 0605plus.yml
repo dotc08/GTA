@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  become: yes  # This is needed to gain super user privileges for disk operations
+  tasks:
+    - name: Create a new physical volume
+      command:
+        cmd: pvcreate /dev/sdc
+
+    - name: Extend the volume group
+      command:
+        cmd: vgextend vg01 /dev/sdc
+
+    - name: Extend the logical volume
+      command:
+        cmd: lvextend -l +100%FREE /dev/vg01/lv01
+
+    - name: Resize the file system
+      command:
+        cmd: xfs_growfs /mnt/my_new_disk
+...
