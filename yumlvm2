@@ -1,0 +1,11 @@
+###ansible-playbook install.yml	（command）
+
+---
+- hosts: localhost
+  connection: local
+  become: yes  # This is needed to gain super user privileges for installing packages
+  tasks:
+    - name: Install LVM2
+      dnf:  # Use 'apt' `yum` for CentOS/RHEL, `dnf` for Fedora, etc.
+        name: lvm2
+        state: present
