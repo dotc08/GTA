@@ -18,7 +18,7 @@
 
 
 /*
-[dottore701@ansible ansible]$ ansible-playbook add.yml
+[aaaaa@ansible ansible]$ ansible-playbook add.yml
 
 PLAY [localhost] **********************************************************************************************
 
@@ -37,7 +37,7 @@ changed: [localhost]
 PLAY RECAP ****************************************************************************************************
 localhost                  : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 
-[dottore701@ansible ansible]$ df -Th
+[aaaaa@ansible ansible]$ df -Th
 Filesystem            Type      Size  Used Avail Use% Mounted on
 devtmpfs              devtmpfs  1.9G     0  1.9G   0% /dev
 tmpfs                 tmpfs     1.9G     0  1.9G   0% /dev/shm
