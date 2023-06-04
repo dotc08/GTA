@@ -1,0 +1,50 @@
+---
+- hosts: localhost
+  become: yes  # This is needed to gain super user privileges for disk operations
+  tasks:
+    - name: Extend the physical volume
+      command:
+        cmd: pvresize /dev/sdb
+
+    - name: Extend the logical volume
+      command:
+        cmd: lvextend -l +100%FREE /dev/vg01/lv01
+
+    - name: Resize the file system
+      command:
+        cmd: xfs_growfs /mnt/my_new_disk
+...
+
+
+
+/*
+[dottore701@ansible ansible]$ ansible-playbook add.yml
+
+PLAY [localhost] **********************************************************************************************
+
+TASK [Gathering Facts] ****************************************************************************************
+ok: [localhost]
+
+TASK [Extend the physical volume] *****************************************************************************
+changed: [localhost]
+
+TASK [Extend the logical volume] ******************************************************************************
+changed: [localhost]
+
+TASK [Resize the file system] *********************************************************************************
+changed: [localhost]
+
+PLAY RECAP ****************************************************************************************************
+localhost                  : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+[dottore701@ansible ansible]$ df -Th
+Filesystem            Type      Size  Used Avail Use% Mounted on
+devtmpfs              devtmpfs  1.9G     0  1.9G   0% /dev
+tmpfs                 tmpfs     1.9G     0  1.9G   0% /dev/shm
+tmpfs                 tmpfs     1.9G  8.4M  1.9G   1% /run
+tmpfs                 tmpfs     1.9G     0  1.9G   0% /sys/fs/cgroup
+/dev/sda2             xfs        20G  3.9G   16G  20% /
+/dev/sda1             vfat      200M  5.8M  195M   3% /boot/efi
+/dev/mapper/vg01-lv01 xfs        15G  140M   15G   1% /mnt/my_new_disk
+tmpfs                 tmpfs     373M     0  373M   0% /run/user/1001
+*/
