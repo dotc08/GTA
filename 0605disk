@@ -1,0 +1,36 @@
+#ディスク追加して、そのディスクを使用可能にする
+#成功（df -h でマウントが確認）
+
+---
+- hosts: localhost
+  become: yes  # This is needed to gain super user privileges for disk operations
+  tasks:
+
+    - name: Create a new physical volume
+      command:
+        cmd: pvcreate /dev/sdb
+
+    - name: Create a new volume group
+      command:
+        cmd: vgcreate vg01 /dev/sdb
+
+    - name: Create a new logical volume
+      command:
+        cmd: lvcreate -l 100%VG -n lv01 vg01
+
+    - name: Create a xfs file system on the new logical volume
+      command:
+        cmd: mkfs.xfs /dev/vg01/lv01
+
+    - name: Create a directory to mount the new file system
+      ansible.builtin.file:
+        path: /mnt/my_new_disk
+        state: directory
+
+    - name: Mount the new file system
+      ansible.posix.mount:
+        path: /mnt/my_new_disk
+        src: /dev/vg01/lv01
+        fstype: xfs
+        state: mounted
+...
